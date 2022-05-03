@@ -14,12 +14,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val repository: WordsRepository
 ) : ViewModel() {
 
+    private lateinit var currentQuestion: Question
+    private var questionIndex: Int = 0
+    private val wordsList = ArrayList<Word>()
+    private var score = 0
 
     private val _state = MutableLiveData<GameState>()
     val state: LiveData<GameState> = _state
@@ -28,7 +33,7 @@ class GameViewModel @Inject constructor(
         fetchWords()
     }
 
-    private fun fetchWords() {
+    fun fetchWords() {
         _state.value = GameState(
             uiState = UIState.LOADING
         )
@@ -36,7 +41,10 @@ class GameViewModel @Inject constructor(
             val result = repository.fetchWords()
             withContext(Dispatchers.Main) {
                 _state.value = when (result) {
-                    is Resource.Success -> sendQuestion(result.data!!)
+                    is Resource.Success -> {
+                        wordsList.addAll(result.data!!)
+                        sendQuestion()
+                    }
                     is Resource.Error ->
                          GameState(
                             uiState = UIState.ERROR,
@@ -47,11 +55,27 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun sendQuestion(data: List<Word>): GameState {
+    private fun sendQuestion(): GameState {
+        val isSendingCorrectQuestion = Random.nextBoolean()
+        val randomIndex = if (wordsList.size > 1)
+            (0 until wordsList.size).random()
+        else 0
+
+        questionIndex++
+
+        currentQuestion = if (isSendingCorrectQuestion)
+            Question(wordsList[questionIndex].textEng, wordsList[questionIndex].textSpa)
+        else
+            Question(wordsList[questionIndex].textEng, wordsList[randomIndex].textSpa)
+
         return GameState(
             uiState = UIState.QUESTION,
-            question = Question(data[0].textEng, data[0].textSpa),
-            score = 0
+            question = currentQuestion,
+            score = score
         )
+    }
+
+    fun noAnswer() {
+        _state.value = sendQuestion()
     }
 }

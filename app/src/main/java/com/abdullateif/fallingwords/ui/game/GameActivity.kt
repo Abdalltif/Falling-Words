@@ -30,13 +30,13 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        viewModel.state.observe(this, Observer { gameState ->
+        viewModel.state.observe(this) { gameState ->
             when (gameState.uiState) {
                 UIState.LOADING -> showLoading()
                 UIState.QUESTION -> startFallingAnimation(gameState)
                 UIState.ERROR -> showErrorDialog(gameState.message)
             }
-        })
+        }
     }
 
     private fun startFallingAnimation(gameState: GameState) {
@@ -47,6 +47,7 @@ class GameActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(p0: Animation?) {
                 cancelFallingAnimation()
+                viewModel.noAnswer()
             }
 
             override fun onAnimationStart(p0: Animation?) {
@@ -61,6 +62,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun cancelFallingAnimation() {
+        binding.tvTranslation.text = ""
+        binding.tvWord.text = ""
         binding.tvTranslation.animation?.setAnimationListener(null)
         binding.tvTranslation.clearAnimation()
     }
@@ -71,6 +74,7 @@ class GameActivity : AppCompatActivity() {
             setTitle(message)
             setCancelable(false)
             setPositiveButton("Try again") { _, _ ->
+                viewModel.fetchWords()
             }
             setNegativeButton("Exit") { _, _ ->
                 exitProcess(-1)
