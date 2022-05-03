@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Falling Words</string>
+    <string name="score">Score</string>
+    <string name="word">word</string>
+    <string name="translation">english translation</string>
+    <string name="wrong">wrong</string>
+    <string name="correct">correct</string>
+    <string name="try_again">Try again</string>
+    <string name="exit">Exit</string>
+    <string name="game_over">Game Over</string>
+    <string name="play_again">Play again</string>
 </resources>

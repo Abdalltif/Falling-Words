@@ -83,10 +83,10 @@ class GameActivity : AppCompatActivity() {
         AlertDialog.Builder(this).apply {
             setTitle(message)
             setCancelable(false)
-            setPositiveButton("Try again") { _, _ ->
+            setPositiveButton(getString(R.string.try_again)) { _, _ ->
                 viewModel.fetchWords()
             }
-            setNegativeButton("Exit") { _, _ ->
+            setNegativeButton(getString(R.string.exit)) { _, _ ->
                 exitProcess(-1)
             }
             show()
@@ -100,13 +100,13 @@ class GameActivity : AppCompatActivity() {
     private fun showGameOverDialog(gameState: GameState) {
         binding.tvScore.text = gameState.score.toString()
         AlertDialog.Builder(this).apply {
-            setTitle("Game Over")
+            setTitle(getString(R.string.game_over))
             setMessage("Your score: ${gameState.score}")
             setCancelable(false)
-            setPositiveButton("Play again") { _, _ ->
+            setPositiveButton(getString(R.string.play_again)) { _, _ ->
                 viewModel.playAgain()
             }
-            setNegativeButton("Exit") { _, _ ->
+            setNegativeButton(getString(R.string.exit)) { _, _ ->
                 exitProcess(-1)
             }
             show()
