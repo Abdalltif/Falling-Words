@@ -95,4 +95,18 @@ class GameViewModel @Inject constructor(
     fun noAnswer() {
         _state.value = sendQuestion()
     }
+
+    fun correctClicked() {
+        if(currentQuestion.translation == wordsList[questionIndex].textSpa) {
+            score += 10
+        }
+        _state.value = sendQuestion()
+    }
+
+    fun wrongClicked() {
+        if(currentQuestion.translation != wordsList[questionIndex].textSpa) {
+            score += 10
+        }
+        _state.value = sendQuestion()
+    }
 }

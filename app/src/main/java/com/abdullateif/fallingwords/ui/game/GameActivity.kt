@@ -27,6 +27,15 @@ class GameActivity : AppCompatActivity() {
         setContentView(view)
 
         setupObservers()
+
+        binding.btnCorrect.setOnClickListener {
+            cancelFallingAnimation()
+            viewModel.correctClicked()
+        }
+        binding.btnWrong.setOnClickListener {
+            cancelFallingAnimation()
+            viewModel.wrongClicked()
+        }
     }
 
     private fun setupObservers() {
