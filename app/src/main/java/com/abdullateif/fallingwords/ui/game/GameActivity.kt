@@ -35,6 +35,7 @@ class GameActivity : AppCompatActivity() {
                 UIState.LOADING -> showLoading()
                 UIState.QUESTION -> startFallingAnimation(gameState)
                 UIState.ERROR -> showErrorDialog(gameState.message)
+                UIState.GAME_OVER -> showGameOverDialog(gameState)
             }
         }
     }
@@ -85,5 +86,21 @@ class GameActivity : AppCompatActivity() {
 
     private fun showLoading () {
         binding.circularProgressbar.visibility = View.VISIBLE
+    }
+
+    private fun showGameOverDialog(gameState: GameState) {
+        binding.tvScore.text = gameState.score.toString()
+        AlertDialog.Builder(this).apply {
+            setTitle("Game Over")
+            setMessage("Your score: ${gameState.score}")
+            setCancelable(false)
+            setPositiveButton("Play again") { _, _ ->
+                viewModel.playAgain()
+            }
+            setNegativeButton("Exit") { _, _ ->
+                exitProcess(-1)
+            }
+            show()
+        }
     }
 }

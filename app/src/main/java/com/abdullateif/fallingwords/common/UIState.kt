@@ -3,5 +3,6 @@ package com.abdullateif.fallingwords.common
 enum class UIState {
     LOADING,
     ERROR,
-    QUESTION
+    QUESTION,
+    GAME_OVER
 }

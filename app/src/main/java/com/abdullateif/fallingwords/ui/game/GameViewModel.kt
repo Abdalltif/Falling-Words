@@ -61,6 +61,12 @@ class GameViewModel @Inject constructor(
             (0 until wordsList.size).random()
         else 0
 
+        if (questionIndex == wordsList.size - 1)
+            return GameState(
+                uiState = UIState.GAME_OVER,
+                score = score
+            )
+
         questionIndex++
 
         currentQuestion = if (isSendingCorrectQuestion)
@@ -73,6 +79,17 @@ class GameViewModel @Inject constructor(
             question = currentQuestion,
             score = score
         )
+    }
+
+    fun playAgain() {
+        reset()
+        fetchWords()
+    }
+
+    private fun reset() {
+        score = 0;
+        questionIndex = 0
+        wordsList.clear()
     }
 
     fun noAnswer() {
